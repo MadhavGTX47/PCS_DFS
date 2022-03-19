@@ -6,10 +6,10 @@
 
 ### Team Members & Contribution:-
 
-Sai Madhav Kolluri - ND92132 -- Worked on the Replica Server Implementation and Environment Setup.
-Sai Jahnavi Bachu - LU59970  -- Worked on the Replica Server Implementation
-Mounica Uddagiri - QL23899   -- Worked on the Master and the Replica Server Implementation
-Venkata Rama Lakshman Nukala - HR39332 -- Worked on the Client and Master Server Implementation
+-Sai Madhav Kolluri - ND92132 -- Worked on the Replica Server Implementation and Environment Setup.
+-Sai Jahnavi Bachu - LU59970  -- Worked on the Replica Server Implementation
+-Mounica Uddagiri - QL23899   -- Worked on the Master and the Replica Server Implementation
+-Venkata Rama Lakshman Nukala - HR39332 -- Worked on the Client and Master Server Implementation
 
 ## Necessary Stuff to know 
 
@@ -24,7 +24,7 @@ Venkata Rama Lakshman Nukala - HR39332 -- Worked on the Client and Master Server
 ##  Step-by-Step instructions:-
 - First Install Eclipse in the machines where you will be running the code (i.e Server, Client, Master.)
 - Then Open Eclipse and Click File -> Open Projects from File System and import the Project Folder.
-- Now once the project is open go to *demo*, till here it is common for all the machines.
+- Now once the project is open go to *src/demo*, till here it is common for all the machines.
 - Now we should setup each of the following in order.
 
 # Replica Server
