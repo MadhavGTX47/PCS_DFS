@@ -1,5 +1,5 @@
 # PCS_DFS
-# CSMC 626:Priniples of Computer Security
+## CSMC 626:Priniples of Computer Security
 ## Distributed File System- Phase 1 
 
 [GitHub Link for this project](https://github.com/MadhavGTX47/PCS_DFS).
