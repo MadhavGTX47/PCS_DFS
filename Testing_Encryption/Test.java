@@ -2,8 +2,6 @@ package net.codejava.crypto;
  
 import java.io.File;
  
-
-
 public class CryptoUtilsTest {
     public static void main(String[] args) {
         String key = "This a very secure key";
@@ -19,3 +17,4 @@ public class CryptoUtilsTest {
             ex.printStackTrace();
         }
     }
+}
