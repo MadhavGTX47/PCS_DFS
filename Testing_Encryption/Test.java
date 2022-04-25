@@ -4,7 +4,9 @@ import java.io.File;
  
 public class CryptoUtilsTest {
     public static void main(String[] args) {
-        String key = "This a very secure key";
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(n);
+        SecretKey key = keyGenerator.generateKey();
         File inputFile = new File("document.txt");
         File encryptedFile = new File("document.encrypted");
         File decryptedFile = new File("document.decrypted");
