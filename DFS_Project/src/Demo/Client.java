@@ -1,7 +1,13 @@
 package Demo;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -9,10 +15,14 @@ import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Scanner;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class Client {
 	
 	static MasterServerClientInterface masterStub;
 	static Registry registry;
+	static String userloggedIn;
 	
 	public Client() {
 		try {
@@ -32,7 +42,16 @@ public class Client {
 	}
 	
 	public void read(String fileName) throws IOException, NotBoundException{
+		String result;
 		List<ReplicaLoc> replicalocations = masterStub.readReplicas();
+		String permission = Client.fetchPermissions(fileName);
+		if (permission.contains("r") || permission == "owner"){
+			result = "Proceed";
+		}
+		else {
+			result = "Deny";
+		}
+		if(result == "Proceed"){
 		ReplicaLoc replicaLoc = replicalocations.get(0);
 //		registry = LocateRegistry.getRegistry(replicaLoc.getAddress(),replicaLoc.getPort());
 		registry = LocateRegistry.getRegistry(replicaLoc.getPort());
@@ -45,6 +64,10 @@ public class Client {
 			System.out.println("File Content: ");
 			System.out.println(fileContent);
 			System.out.println("Read action completed successfully");
+		}
+		}
+		else {
+			System.out.println("Access denied");
 		}
 		
 	}
@@ -100,6 +123,61 @@ public class Client {
 			
 		}
 	}
+	// code for registering new user 
+	public static void registeruser(String username, String password) throws IOException {
+		String userdetails = username+":"+password;
+		//BufferedReader br = new BufferedReader(new FileReader("UserDetails.txt"));
+		 Path fileName = Path.of(
+		            "UserDetails.txt");
+		 BufferedWriter bw = Files.newBufferedWriter(fileName, StandardOpenOption.APPEND);
+		 bw.write(userdetails);
+		 bw.newLine();
+		 //Files.writeString(fileName, userdetails,StandardOpenOption.APPEND);
+		 bw.close();
+		 System.out.println("User registered successfully");
+	}
+	// code for login user
+	public static void loginUser(String username, String password) throws IOException {
+		String loginResult = masterStub.loginUser(username, password);
+		System.out.println("LOgin result is:"+loginResult);
+		if (loginResult != ""){
+			System.out.println("User logged in successfully");
+		}
+		else {
+			System.out.println("Error in login");
+		}
+		userloggedIn = username;
+	}
+	// call master to create permission for a file
+	public static void createPermissions(String filename, String owner, String permissions) throws IOException {
+//		JSONObject permissionobject = new JSONObject();
+//		JSONArray permissiondetails = new JSONArray();  
+//		permissiondetails.add(owner);
+//		permissiondetails.add(permissions);
+//		permissionobject.put(filename, permissiondetails);
+//		File file=new File("Permissions.json");  
+//        file.createNewFile();  
+//        FileWriter fileWriter = new FileWriter(file);  
+//        System.out.println("Writing JSON object to file");  
+//        System.out.println("-----------------------");  
+//        System.out.print(permissionobject);  
+//
+//        fileWriter.write(permissionobject.toJSONString());
+//        fileWriter.flush();  
+//        fileWriter.close(); 
+		masterStub.setPermission(filename, owner, permissions);
+		
+	}
+	//call master to get permission details for operations
+	public static String fetchPermissions(String filename) throws RemoteException {
+		 String permission = masterStub.fetchPermission(filename, userloggedIn);
+		 if(permission == "owner"){
+			 return "owner";
+			 }
+		 else {
+			 return permission;
+		 }
+	}
 	
 	public static void main(String arg[]) {
 		
@@ -121,6 +199,13 @@ public class Client {
 				case "write":
 					System.out.println("Enter file name: ");
 					String fwname = input.nextLine();
+					File tempfile = new File(".//Replica_0/"+fwname);
+					boolean fileexists = tempfile.exists();
+					if(fileexists != true) {
+						System.out.println("Define permissions for the file:");
+						String permissions = input.nextLine();
+						Client.createPermissions(fwname, userloggedIn, permissions);
+					}
 					System.out.println("Enter the content to be written: ");
 					String content = input.nextLine();	
 					byte[] bcontent = content.getBytes(StandardCharsets.UTF_8);
@@ -137,6 +222,24 @@ public class Client {
 					System.out.print("Enter the file name: ");
 					String fdname = input.nextLine();
 					c.delete(fdname);
+					break;
+				case "registeruser":
+					System.out.println("Enter username:");
+					Scanner u1 = new Scanner(System.in);
+					String uname = u1.nextLine();
+					System.out.println("Enter password:");
+					Scanner p1 = new Scanner(System.in);
+					String pword = p1.nextLine();
+					Client.registeruser(uname, pword);
+					break;
+				case "loginuser":
+					System.out.println("Enter username:");
+					Scanner u2 = new Scanner(System.in);
+					String usname = u2.nextLine();
+					System.out.println("Enter password:");
+					Scanner p2 = new Scanner(System.in);
+					String paword = p2.nextLine();
+					Client.loginUser(usname, paword);
 					break;
 				default:
 					System.out.println("Invalid Operation");

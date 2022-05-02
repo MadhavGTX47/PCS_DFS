@@ -42,6 +42,7 @@ public class ReplicaServer implements ReplicaServerClientInterface, ReplicaMaste
 	}
 	
 	public void createFile(String fileName) throws IOException {
+		System.out.println("Creating new file");
 		File file = new File(dir+fileName);
 		
 		locks.putIfAbsent(fileName, new ReentrantReadWriteLock());
