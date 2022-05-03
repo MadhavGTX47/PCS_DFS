@@ -6,10 +6,19 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Scanner;
 
-public class Client {
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+public class Client{
 	
 	static MasterServerClientInterface masterStub;
 	static Registry registry;
@@ -83,7 +92,9 @@ public class Client {
 	}
 	
 	@SuppressWarnings("unused")
-	public void write(String fileName, byte[] data) throws IOException, NotBoundException, MessageNotFoundException{
+	public void write(String fileName, byte[] data) throws IOException, NotBoundException, MessageNotFoundException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException{
+		
+		
 		List<ReplicaLoc> replicalocations = masterStub.readReplicas();
 		for(int i = 0; i< replicalocations.size();i++) {
 			ReplicaLoc replicaLoc = replicalocations.get(i);
@@ -93,6 +104,7 @@ public class Client {
 			ReplicaServerClientInterface replicaStub = (ReplicaServerClientInterface) registry.lookup("ReplicaClient"+replicaID);
 			FileContent fileContent = new FileContent(fileName);
 			fileContent.setData(data);
+			
 			ChunkAck chunkAck;
 			chunkAck = replicaStub.write(i+1, 1, fileContent);
 			System.out.println("Write action completed successfully");
@@ -101,7 +113,11 @@ public class Client {
 		}
 	}
 	
-	public static void main(String arg[]) {
+	public static void main(String arg[]) throws NoSuchAlgorithmException {
+		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+		SecureRandom random = new SecureRandom(); // cryptograph. secure random 
+		keyGen.init(random); 
+		SecretKey secretKey = keyGen.generateKey();
 		
 		try {
 			String con = "yes";
@@ -116,7 +132,11 @@ public class Client {
 				case "read":
 					System.out.print("Enter file name: ");
 					String fname = input.nextLine();
+					ReplicaServer replicaServer = new ReplicaServer(0, null);
+					replicaServer.decryptedFile(secretKey, fname, fname);
 					c.read(fname);
+					
+
 					break;
 				case "write":
 					System.out.println("Enter file name: ");
@@ -125,6 +145,10 @@ public class Client {
 					String content = input.nextLine();	
 					byte[] bcontent = content.getBytes(StandardCharsets.UTF_8);
 					c.write(fwname,bcontent);
+					ReplicaServer replicaServer1 = new ReplicaServer(0, null);
+					replicaServer1.encryptedFile(secretKey, fwname, fwname);
+
+
 					break;
 				case "rename":
 					System.out.print("Enter the file name to be changed: ");
