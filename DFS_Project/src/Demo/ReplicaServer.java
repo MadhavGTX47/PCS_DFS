@@ -168,12 +168,14 @@ public class ReplicaServer implements ReplicaServerClientInterface, ReplicaMaste
 			  //System.out.println("New File: " + "\"C:\\Users\\sai jahnavi\\Desktop\\textdecrypt.txt\"");
 			 }
 	
+
 	public void createFile(String fileName) throws IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		/*KeyGenerator keyGen = KeyGenerator.getInstance("AES");
 		SecureRandom random = new SecureRandom(); // cryptograph. secure random 
 		keyGen.init(random); 
 		SecretKey secretKey = keyGen.generateKey();*/
 		
+
 		File file = new File(dir+fileName);
 		
 		locks.putIfAbsent(fileName, new ReentrantReadWriteLock());

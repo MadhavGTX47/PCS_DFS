@@ -33,6 +33,14 @@ public interface MasterServerClientInterface extends Remote{
 	IOException, RemoteException;
 	
 	public WriteAck write(String fileName) throws RemoteException, IOException;
+
+	public String loginUser(String username, String password) throws IOException;
+
+	public void setPermission(String filename, String owner, String permission) throws RemoteException;
+	
+	public String fetchPermission(String filename, String userloggedIn) throws RemoteException;
+	
+	//public String setPermission(String filename, String owner, String permission);
 	
 	
 	/**

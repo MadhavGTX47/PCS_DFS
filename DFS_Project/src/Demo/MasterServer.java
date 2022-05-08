@@ -9,7 +9,6 @@ import java.net.URL;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.*;
 import java.rmi.*;
 
@@ -24,12 +23,16 @@ public class MasterServer implements MasterReplicaInterface, MasterServerClientI
 	private Map<String,	 ReplicaLoc> primaryReplicaMap;
 	private List<ReplicaLoc> replicaServersLocs;
 	private List<ReplicaMasterInterface> replicaServersStubs; 
+	private Map<String, String> permissionMap;
+	//List<String> permissionDetails = new ArrayList<String>();
+
 	
 	public MasterServer() {
 		filesLocationMap = new HashMap<String, List<ReplicaLoc>>();
 		primaryReplicaMap = new HashMap<String, ReplicaLoc>();
 		replicaServersLocs = new ArrayList<ReplicaLoc>();
 		replicaServersStubs = new ArrayList<ReplicaMasterInterface>();
+		permissionMap = new TreeMap<String, String>();
 		nextTID = 0;
 		randomGen = new Random();
 		
@@ -138,6 +141,56 @@ public class MasterServer implements MasterReplicaInterface, MasterServerClientI
 		}
 		br.close();
 	}
+	public String loginUser(String username, String password) throws IOException {
+		String[] userdet_arr;
+		String userdetails;
+		String loginresult = "";
+		BufferedReader br = new BufferedReader(new FileReader("UserDetails.txt"));
+		
+		while((userdetails = br.readLine())!= null){
+				
+				
+				System.out.println(userdetails);
+				userdet_arr = userdetails.split(":");
+				if(username.equals(userdet_arr[0]) && password.equals(userdet_arr[1]))  {
+					loginresult = "true";
+				}
+				
+				
+			}
+		if(loginresult == "true") {
+			System.out.println("User logged in successfully");
+		}
+		else{
+			System.out.println("Details incorrect");
+		}
+			br.close();
+		return loginresult;
+		
+	}
+	@Override
+	public void setPermission(String filename, String owner, String permission) {
+		// TODO Auto-generated method stub
+		permissionMap.put(filename, owner+":"+permission);
+		System.out.println(permissionMap);
+	}
+	
+	public String fetchPermission(String filename, String userloggedIn) {
+		// TODO Auto-generated method stub
+		String permissionvalue;
+		String permission = permissionMap.get(filename);
+		String [] permissionarray = permission.split(":");
+		String userId = permissionarray[0];
+		if(userId == userloggedIn) {
+			permissionvalue = "owner";
+		}
+		else {
+			permissionvalue = permissionarray[1];
+		}
+		
+		return permissionvalue;
+	}
+	
 	
 	public static void main(String[] args) throws IOException, NotBoundException {
 		try {
@@ -155,6 +208,12 @@ public class MasterServer implements MasterReplicaInterface, MasterServerClientI
 			e.printStackTrace();
 		}
 	}
+
+	
+
+	
+
+	
 		
 
 }
