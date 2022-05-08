@@ -21,6 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,6 +32,9 @@ public class ReplicaServer implements ReplicaServerClientInterface, ReplicaMaste
 	public String dir;
 	private static Registry registry;
 	private String readContent;
+	public static String encodedString;
+	public static String decodedString;
+
 	
 	
 	private Map<Long, String> activeTxn; 
@@ -58,7 +62,49 @@ public class ReplicaServer implements ReplicaServerClientInterface, ReplicaMaste
 		
 		
 	}
-	public void encryptedFile(SecretKey secretKey, String fileInputPath, String fileOutPath)
+	/*public static String encryptedFileName(SecretKey secretKey, String fileInputPath)
+			   throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException,
+			   IllegalBlockSizeException, BadPaddingException {
+		
+		byte[] raw = secretKey.getEncoded();
+
+		  SecretKey key = new SecretKeySpec(raw, "AES");
+		  Cipher cipher = Cipher.getInstance("AES");
+		  cipher.init(Cipher.ENCRYPT_MODE, key);
+		//inputfile = fileInputPath.getBytes();	  
+	    //cipher.update(inputfile);
+		//return inputfile;
+		  //byte[] inputfile = fileInputPath.getBytes();	  
+		   //cipher.update(inputfile);
+		   //byte[] cipherText = cipher.doFinal();
+		   //String s = new String(cipherText, StandardCharsets.UTF_8);
+		   String encodedString = Base64.getEncoder().encodeToString(fileInputPath.getBytes());
+
+		return encodedString;
+		
+
+		   //return s;
+		
+	}
+	public static String decryptedFileName(SecretKey secretKey)
+			   throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException,
+			   IllegalBlockSizeException, BadPaddingException {
+		
+		//byte[] raw = secretKey.getEncoded();
+
+		//  SecretKey key = new SecretKeySpec(raw, "AES");
+		  //Cipher cipher = Cipher.getInstance("AES");
+		  //cipher.init(Cipher.DECRYPT_MODE, key);
+	    //cipher.update(encodedString);
+	    //byte[] cipherText = cipher.doFinal();
+		  // return cipherText;
+		byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+		   String decodedString = new String(decodedBytes);
+		   return decodedString;
+		   
+		
+	}*/
+	public void encryptedFile(SecretKey secretKey, String encryptFileName)
 			   throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException,
 			   IllegalBlockSizeException, BadPaddingException {
 			  byte[] raw = secretKey.getEncoded();
@@ -70,15 +116,16 @@ public class ReplicaServer implements ReplicaServerClientInterface, ReplicaMaste
 			  String s = currentRelativePath.toAbsolutePath().toString();
 			  //Path path = FileSystems.getDefault().getPath(fileInputPath);
 			  //String s = path.toString();
-
-
-			  var fileInput = new File(s+"/Replica_"+ id +"/"+fileInputPath);
+			  var fileInput = new File(s+"/Replica_"+ id +"/"+encryptFileName) ;
 			  var inputStream = new FileInputStream(fileInput);
 			  var inputBytes = new byte[(int) fileInput.length()];
 			  inputStream.read(inputBytes);
+			  //inputfile = fileInputPath.getBytes();	  
+		      //cipher.update(inputfile);
+
 
 			  var outputBytes = cipher.doFinal(inputBytes);
-			  var fileEncryptOut = new File(s+"/Replica_"+ id +"/"+fileOutPath);
+			  var fileEncryptOut = new File(s+"/Replica_"+ id +"/"+encryptFileName);
 			  var outputStream = new FileOutputStream(fileEncryptOut);
 			  outputStream.write(outputBytes);
 
@@ -86,9 +133,11 @@ public class ReplicaServer implements ReplicaServerClientInterface, ReplicaMaste
 			  outputStream.close();
 			  
 			  System.out.println("File successfully encrypted!");
-			  //System.out.println("New File: " + fileOutPath);
+		     			  //System.out.println("New File: " + fileOutPath);
 			 }
-	public void decryptedFile(SecretKey secretKey, String fileInputPath, String fileOutPath)
+	
+
+	public void decryptedFile(SecretKey secretKey, String fileOutPath)
 			   throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException,
 			   IllegalBlockSizeException, BadPaddingException {
 				 byte[] raw = secretKey.getEncoded();
@@ -97,14 +146,17 @@ public class ReplicaServer implements ReplicaServerClientInterface, ReplicaMaste
 				 cipher.init(Cipher.DECRYPT_MODE, key);
 				 Path currentRelativePath = Paths.get("");
 				  String s = currentRelativePath.toAbsolutePath().toString();
+				  //byte[] input = fileInputPath.getBytes();	  
+			      //cipher.update(input);
 
-			  var fileInput = new File(s+"/Replica_"+ id +"/"+fileInputPath);
+
+			  var fileInput = new File(s+"/Replica_"+ id +"/"+fileOutPath);
 			  var inputStream = new FileInputStream(fileInput);
 			  var inputBytes = new byte[(int) fileInput.length()];
 			  inputStream.read(inputBytes);
 
 			  byte[] outputBytes = cipher.doFinal(inputBytes);
-
+              
 			  var fileEncryptOut = new File(s+"/Replica_"+ id +"/"+fileOutPath);
 			  var outputStream = new FileOutputStream(fileEncryptOut);
 			  outputStream.write(outputBytes);
