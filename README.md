@@ -6,10 +6,10 @@
 
 ### Team Members & Contribution:-
 
--Sai Madhav Kolluri - ND92132 -- Worked on the Replica Server Implementation and Environment Setup.
--Sai Jahnavi Bachu - LU59970  -- Worked on the Replica Server Implementation
--Mounica Uddagiri - QL23899   -- Worked on the Master and the Replica Server Implementation
--Venkata Rama Lakshman Nukala - HR39332 -- Worked on the Client and Master Server Implementation
+- Sai Madhav Kolluri : ND92132 - Worked on the Replica Server Implementation and Environment Setup.
+- Sai Jahnavi Bachu : LU59970  - Worked on the Replica Server Implementation
+- Mounica Uddagiri : QL23899   - Worked on the Master and the Replica Server Implementation
+- Venkata Rama Lakshman Nukala :HR39332 - Worked on the Client and Master Server Implementation
 
 ## Necessary Stuff to know 
 
