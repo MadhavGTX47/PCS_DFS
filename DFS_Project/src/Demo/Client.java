@@ -6,13 +6,25 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
 
-public class Client {
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+public class Client{
 	
 	static MasterServerClientInterface masterStub;
 	static Registry registry;
+	static String decodedFile;
 	
 	public Client() {
 		try {
@@ -83,7 +95,9 @@ public class Client {
 	}
 	
 	@SuppressWarnings("unused")
-	public void write(String fileName, byte[] data) throws IOException, NotBoundException, MessageNotFoundException{
+	public void write(String fileName, byte[] data) throws IOException, NotBoundException, MessageNotFoundException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException{
+		
+		
 		List<ReplicaLoc> replicalocations = masterStub.readReplicas();
 		for(int i = 0; i< replicalocations.size();i++) {
 			ReplicaLoc replicaLoc = replicalocations.get(i);
@@ -93,6 +107,7 @@ public class Client {
 			ReplicaServerClientInterface replicaStub = (ReplicaServerClientInterface) registry.lookup("ReplicaClient"+replicaID);
 			FileContent fileContent = new FileContent(fileName);
 			fileContent.setData(data);
+			
 			ChunkAck chunkAck;
 			chunkAck = replicaStub.write(i+1, 1, fileContent);
 			System.out.println("Write action completed successfully");
@@ -101,7 +116,11 @@ public class Client {
 		}
 	}
 	
-	public static void main(String arg[]) {
+	public static void main(String arg[]) throws NoSuchAlgorithmException {
+		KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+		SecureRandom random = new SecureRandom(); // cryptograph. secure random 
+		keyGen.init(random); 
+		SecretKey secretKey = keyGen.generateKey();
 		
 		try {
 			String con = "yes";
@@ -114,17 +133,32 @@ public class Client {
 				String operation = input.nextLine().toLowerCase();
 				switch(operation) {
 				case "read":
+					
+					//ReplicaServer.decryptfileName(secretKey);
+					ReplicaServer replicaServer = new ReplicaServer(0, null);
+
+					//String decryptFileName=replicaServer.decryptedFileName(secretKey);
+					//byte[] decodedBytes = Base64.getDecoder().decode(decodedFile);
+					//String decodedFileName = new String(decodedBytes);
+					//System.out.println("file name: "+ decodedFileName);
 					System.out.print("Enter file name: ");
 					String fname = input.nextLine();
-					c.read(fname);
+					String encodedFileName = Base64.getEncoder().encodeToString(fname.getBytes());
+					replicaServer.decryptedFile(secretKey, encodedFileName);
+					c.read(encodedFileName);
 					break;
 				case "write":
 					System.out.println("Enter file name: ");
 					String fwname = input.nextLine();
-					System.out.println("Enter the content to be written: ");
+                    ReplicaServer replicaServer1 = new ReplicaServer(0, null);
+
+					//String encryptFileName=replicaServer1.encryptedFileName(secretKey,fwname);
+                	String encodedFileName1 = Base64.getEncoder().encodeToString(fwname.getBytes());
+                	System.out.println("Enter the content to be written: ");
 					String content = input.nextLine();	
 					byte[] bcontent = content.getBytes(StandardCharsets.UTF_8);
-					c.write(fwname,bcontent);
+					c.write(encodedFileName1,bcontent);
+					replicaServer1.encryptedFile(secretKey, encodedFileName1);
 					break;
 				case "rename":
 					System.out.print("Enter the file name to be changed: ");
