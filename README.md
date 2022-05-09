@@ -9,17 +9,21 @@
 - Sai Madhav Kolluri : ND92132 - Worked on the Replica Server Implementation and Environment Setup.
 - Sai Jahnavi Bachu : LU59970  - Worked on the Replica Server Implementation
 - Mounica Uddagiri : QL23899   - Worked on the Master and the Replica Server Implementation
-- Venkata Rama Lakshman Nukala :HR39332 - Worked on the Client and Master Server Implementation
+- Venkata Rama Lakshman Nukala : HR39332 - Worked on the Client and Master Server Implementation
 
 ## Necessary Stuff to know 
 
-- We used Eclipse to develop this project in JAVA, and the Library we used explicitly is RMI  apart from the rest are default libraries.
+- We used Eclipse to develop this project in JAVA, and we have listed the Libraries used int the section below.
 - Make sure your JAVA is installed on your pc (The latest version if possible)
 - To Run You need at least one instance of the console running each:- Replica, Client, Master.
 - The overall flow to execute would be run the Replica servers, then the master and the client, and all the commands will be sent from a client.
 
 ## Libraries Used
 - [Package java.rmi](https://docs.oracle.com/javase/8/docs/api/java/rmi/package-summary.html)
+- [Package javax.crypto](https://docs.oracle.com/javase/8/docs/api/javax/crypto/package-summary.html)
+- 
+
+
 
 ##  Step-by-Step instructions:-
 - First Install Eclipse in the machines where you will be running the code (i.e Server, Client, Master.)
