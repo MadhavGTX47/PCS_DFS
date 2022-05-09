@@ -34,11 +34,16 @@ public interface MasterServerClientInterface extends Remote{
 	
 	public WriteAck write(String fileName) throws RemoteException, IOException;
 
-	public String loginUser(String username, String password) throws IOException;
+	public boolean loginUser(String username, String password) throws IOException;
 
 	public void setPermission(String filename, String owner, String permission) throws RemoteException;
 	
 	public String fetchPermission(String filename, String userloggedIn) throws RemoteException;
+
+	public boolean registerNewUser(String username, String password) throws RemoteException;
+
+
+//	public boolean registerNewUser(String username, String password);
 	
 	//public String setPermission(String filename, String owner, String permission);
 	
