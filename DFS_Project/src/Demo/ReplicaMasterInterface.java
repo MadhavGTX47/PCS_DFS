@@ -3,7 +3,13 @@ package Demo;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 
 public interface ReplicaMasterInterface extends ReplicaInterface{
@@ -12,8 +18,13 @@ public interface ReplicaMasterInterface extends ReplicaInterface{
 	 * creates the file at the replica server 
 	 * @param fileName
 	 * @throws IOException 
+	 * @throws NoSuchAlgorithmException 
+	 * @throws BadPaddingException 
+	 * @throws IllegalBlockSizeException 
+	 * @throws NoSuchPaddingException 
+	 * @throws InvalidKeyException 
 	 */
-	public void createFile(String fileName) throws RemoteException, IOException;
+	public void createFile(String fileName) throws RemoteException, IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException;
 	
 	/**
 	 * makes the current replica the master of the passed file
