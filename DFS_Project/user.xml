@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><users>
+<user><username>mounica</username><password>C8FksC/U2XBPWSfoGGibx1Zrur2jGy+Xgh4zB423RHM=</password><saltvalue>GfozIJyiO634vSZu9TZsNLlLvvFeKk</saltvalue><file><name>file1</name><permission>rw</permission></file><file><name>file2</name><permission>rwx</permission></file></user><user><username>damon</username><password>3WU+6uQFa2HFfyjtjTToXbQfgXhsSE4jJPCp5eRQUoM=</password><saltvalue>grmmmO3yDnNQoKVeVZ1TWp64N72ko9</saltvalue><file><name>file3</name><permission>r</permission></file></user></users>
