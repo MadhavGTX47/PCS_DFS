@@ -18,11 +18,6 @@ public interface ReplicaMasterInterface extends ReplicaInterface{
 	 * creates the file at the replica server 
 	 * @param fileName
 	 * @throws IOException 
-	 * @throws NoSuchAlgorithmException 
-	 * @throws BadPaddingException 
-	 * @throws IllegalBlockSizeException 
-	 * @throws NoSuchPaddingException 
-	 * @throws InvalidKeyException 
 	 */
 	public void createFile(String fileName) throws RemoteException, IOException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException;
 	

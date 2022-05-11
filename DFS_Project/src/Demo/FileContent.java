@@ -34,5 +34,4 @@ public class FileContent implements Serializable{
 		this.data = data;
 	}
 	
-	
 }
