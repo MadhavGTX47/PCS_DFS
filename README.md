@@ -1,15 +1,15 @@
 # PCS_DFS
 ## CSMC 626:Priniples of Computer Security
-## Distributed File System- Phase 1 
+## Secure Distributed File System 
 
 [GitHub Link for this project](https://github.com/MadhavGTX47/PCS_DFS).
 
 ### Team Members & Contribution:-
 
-- Sai Madhav Kolluri : ND92132 - Worked on the Replica Server Implementation and Environment Setup.
-- Sai Jahnavi Bachu : LU59970  - Worked on the Replica Server Implementation
-- Mounica Uddagiri : QL23899   - Worked on the Master and the Replica Server Implementation
-- Venkata Rama Lakshman Nukala : HR39332 - Worked on the Client and Master Server Implementation
+- Sai Jahnavi Bachu : LU59970  - Worked on the Replica Server Implementation, Encryption.
+- Sai Madhav Kolluri : ND92132 - Worked on the Replica Server Implementation, Encryption, Environment Setup and Report.
+- Mounica Uddagiri : QL23899   - Worked on the Master and the Replica Server Implementation, File permissions and Encryption.
+- Venkata Rama Lakshman Nukala : HR39332 - Worked on the Client and Master Server Implementation, File Permissions, Malicious Server Defense. 
 
 ## Necessary Stuff to know 
 
@@ -21,7 +21,8 @@
 ## Libraries Used
 - [Package java.rmi](https://docs.oracle.com/javase/8/docs/api/java/rmi/package-summary.html)
 - [Package javax.crypto](https://docs.oracle.com/javase/8/docs/api/javax/crypto/package-summary.html)
-- 
+- [Package javax.xml](https://docs.oracle.com/javase/8/docs/api/index.html)
+- [java.security ](https://docs.oracle.com/javase/7/docs/api/java/security/package-summary.html)
 
 
 
@@ -50,11 +51,27 @@ ReplicaServer rs = new ReplicaServer(Replicanumber, "Directory path");
 - For the Master Server, run the **MasterServer.java**, then in the Console, it should show It is connected to the Replica Servers.
 
 # Client Server
-- For the Client, run the **ClientServer.java**, then in the Console it should show Possible options, And the user has to type the name of the operation he needs.
+- For the Client, run the **ClientServer.java**, then in the Console it should show sign in or signup, for first type sign up, then it will ask for username give a user name, next it will ask a password give a password.
+```sh
+signin
+signup
+``` 
+
+- Now, after signup it forwoards the user to sign in, here give user username and passsword.
+- After an succesful sign in Possible opertaions which can be done are displayed, And the user has to type the name of the operation he needs.
 
 ```sh
 read
 write 
 rename
 delete
+list files
 ```
+- **read** : Here it asks us the name of the file to read, after we give a name to read,it shows the content of the file.
+- **write** : Here it will ask name of the file to write, then after giving the name , it asks for file permission (Example:rw, rwx) we give it in unix style, then it shows if it was able to write succesfully.
+- **rename** : Here it will ask name of the file to rename, and you give a new name to rename it to.
+- **delete** : Here it will ask name of the file to delete, and you give naem of the file you want to delete.
+- **list files** : here it lists all the files present, but the names here are all encrypted.
+
+
+
