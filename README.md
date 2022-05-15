@@ -34,7 +34,7 @@
 
 # Replica Server
 - First got to the file **ReplicaServer.java** and change the port number for each replica. 
-- Now change the replica details for each replica as shown below in the *line:177*
+- Now change the replica details for each replica as shown below in the *line:251*
 ```sh
 Example:-
 ReplicaServer rs = new ReplicaServer(0, "./");
